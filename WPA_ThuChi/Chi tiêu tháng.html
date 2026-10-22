@@ -82,11 +82,21 @@ button{cursor:pointer}
 .install-card{margin:0 0 14px;padding:15px;border:1px solid var(--line);border-radius:16px;background:var(--bg)}
 .install-card h3{display:flex;align-items:center;gap:8px;margin:0 0 8px;font-size:15px}
 .install-card p{margin:0;color:var(--mute);font-size:13px;line-height:1.55}
-.times{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:14px 0 10px}
-.time{padding:9px 2px;border-radius:10px;background:var(--sheet);text-align:center;font-size:13px;font-weight:600;font-variant-numeric:tabular-nums}
+.schedule-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.schedule-head h3{margin:0}
+.schedule-count{color:var(--mute);font-size:12px;font-weight:500}
+.time-list{display:grid;gap:8px;margin:10px 0}
+.time-row{display:flex;align-items:center;gap:10px;padding:8px;border:1px solid var(--line);border-radius:12px;background:var(--sheet)}
+.time-index{display:grid;flex:none;width:26px;height:26px;place-items:center;border-radius:8px;background:var(--bg);color:var(--mute);font-size:12px;font-weight:600}
+.time-row input{flex:1;min-width:0;height:38px;padding:0 10px;border:0;border-radius:9px;background:var(--bg);font-size:16px;font-weight:600;font-variant-numeric:tabular-nums}
+.remove-time{display:grid;flex:none;width:36px;height:36px;place-items:center;border:0;border-radius:9px;background:none;color:var(--acc);font-size:22px;line-height:1}
+.remove-time:disabled{visibility:hidden}
+.add-time{width:100%;height:40px;margin:2px 0 10px;border:1px dashed var(--line);border-radius:11px;background:none;color:var(--ink);font-size:13px;font-weight:600}
+.add-time:disabled{opacity:.4}
 .cal{display:flex;align-items:center;justify-content:center;width:100%;height:54px;margin-top:18px;border:0;border-radius:16px;background:var(--acc);color:var(--acc-ink);font-weight:600;text-decoration:none}
 .cal:active{transform:scale(.98)}
 .cal-fallback{display:block;width:100%;padding:13px 0;border:0;background:none;color:var(--mute);font-size:13px;text-align:center;text-decoration:underline;text-underline-offset:3px}
+.cal-status{min-height:18px;margin:0;text-align:center;color:var(--in);font-size:12px}
 .steps{margin:18px 0 10px;padding:0;list-style:none;counter-reset:step}
 .steps li{display:flex;gap:10px;margin:10px 0;color:var(--mute);font-size:13px;line-height:1.5;counter-increment:step}
 .steps li::before{content:counter(step);display:grid;flex:none;width:22px;height:22px;place-items:center;border-radius:50%;background:var(--ink);color:var(--bg);font-size:11px;font-weight:700}
@@ -108,7 +118,7 @@ body.modal-open{overflow:hidden}
   <div class="sub"><span>Đã thu <b id="in">0đ</b></span><span><span id="cnt">0</span> giao dịch</span></div>
   <button class="remind" id="remind" type="button" aria-haspopup="dialog">
     <span class="remind-ico" aria-hidden="true">🔔</span>
-    <span class="remind-copy"><b>Nhắc ghi chi tiêu</b><small>09:00 · 13:00 · 17:00 · 21:00</small></span>
+    <span class="remind-copy"><b>Nhắc ghi chi tiêu</b><small id="scheduleSummary">09:00 · 13:00 · 17:00 · 21:00</small></span>
     <span class="chev" aria-hidden="true">›</span>
   </button>
   <div id="list"></div>
@@ -136,29 +146,31 @@ body.modal-open{overflow:hidden}
       <p>Dùng lịch của iPhone để nhắc ngay cả khi ứng dụng đã đóng hoặc điện thoại không có mạng.</p>
     </div>
     <div class="install-card">
-      <h3><span aria-hidden="true">📅</span> Bốn lần mỗi ngày</h3>
-      <div class="times" aria-label="Các giờ nhắc"><span class="time">09:00</span><span class="time">13:00</span><span class="time">17:00</span><span class="time">21:00</span></div>
-      <p>Mỗi thông báo cách nhau khoảng 4 giờ. Calendar sẽ tự lặp lại hằng ngày.</p>
+      <div class="schedule-head"><h3><span aria-hidden="true">📅</span> Chọn giờ nhắc</h3><span class="schedule-count" id="reminderCount">4 mốc</span></div>
+      <div class="time-list" id="times" aria-label="Các giờ nhắc"></div>
+      <button class="add-time" id="addTime" type="button">＋ Thêm giờ nhắc</button>
+      <p>Chọn tối đa 6 mốc. Các giờ được lưu riêng trên thiết bị này.</p>
     </div>
     <div class="install-card">
       <h3><span aria-hidden="true">📱</span> Cài ứng dụng trên iPhone</h3>
       <p>Mở trang bằng Safari, chạm <b>Chia sẻ</b>, rồi chọn <b>Thêm vào Màn hình chính</b>. Sau lần mở đầu tiên, ứng dụng có thể dùng offline.</p>
     </div>
-    <a class="cal" id="cal" href="nhac-ghi-chi-tieu.ics">Cài lịch nhắc trên iPhone</a>
-    <a class="cal-fallback" id="calDownload" href="nhac-ghi-chi-tieu.ics" download>Tải tệp lịch .ics</a>
+    <button class="cal" id="cal" type="button">Tạo lịch với giờ đã chọn</button>
+    <button class="cal-fallback" id="calDownload" type="button">Chia sẻ hoặc lưu tệp .ics</button>
+    <p class="cal-status" id="calStatus" role="status" aria-live="polite"></p>
     <ol class="steps">
-      <li><span>Chạm nút cài lịch và cho phép mở ứng dụng Calendar.</span></li>
-      <li><span>Chọn <b>Đăng ký</b> hoặc <b>Thêm tất cả</b>, sau đó bảo đảm cảnh báo được bật.</span></li>
-      <li><span>Khi không muốn nhận nữa, mở Calendar → Calendars → Nhắc ghi chi tiêu → Hủy đăng ký.</span></li>
+      <li><span>Chỉnh các mốc giờ rồi chạm <b>Tạo lịch với giờ đã chọn</b>.</span></li>
+      <li><span>Khi Safari mở tệp lịch, chọn <b>Thêm tất cả</b> và bảo đảm cảnh báo được bật.</span></li>
+      <li><span>Nếu đổi lịch đã cài, hãy xóa các chuỗi nhắc cũ trong Calendar trước khi thêm lịch mới để tránh báo trùng.</span></li>
     </ol>
-    <p class="fine">Cần mạng trong lần cài lịch đầu tiên. Sau đó Calendar nhắc độc lập và không đọc hay tải lên dữ liệu thu chi của bạn.</p>
+    <p class="fine">Tệp lịch được tạo ngay trên điện thoại, không đọc hay tải lên dữ liệu thu chi. Sau khi thêm, Calendar nhắc độc lập kể cả khi PWA đã đóng.</p>
     <button class="close-sheet" id="rclose" type="button">Đóng</button>
   </div>
 </div>
 
 <script>
 (()=>{
-const $=s=>document.querySelector(s),K="chitieu-demo-v1",
+const $=s=>document.querySelector(s),K="chitieu-demo-v1",RK="chitieu-reminder-times-v1",
 W=["Chủ nhật","Thứ Hai","Thứ Ba","Thứ Tư","Thứ Năm","Thứ Sáu","Thứ Bảy"],
 C={out:[["🍜","Ăn uống"],["🛵","Đi lại"],["🛍️","Mua sắm"],["🏠","Nhà ở"],["💡","Hóa đơn"],["🎬","Giải trí"],["📦","Khác"]],in:[["💼","Lương"],["🎁","Thưởng"],["💰","Khác"]]},
 num=n=>String(n).replace(/\B(?=(\d{3})+(?!\d))/g,"."),
@@ -167,7 +179,7 @@ pad=n=>String(n).padStart(2,"0"),
 iso=d=>d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate()),
 esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])),
 now=new Date(),
-bd=$("#bd"),rbd=$("#rbd"),A=$("#a"),N=$("#n"),DT=$("#dt"),OK=$("#ok"),DEL=$("#del"),CAL=$("#cal");
+bd=$("#bd"),rbd=$("#rbd"),A=$("#a"),N=$("#n"),DT=$("#dt"),OK=$("#ok"),DEL=$("#del"),CAL=$("#cal"),CAL_DOWNLOAD=$("#calDownload"),TIME_LIST=$("#times"),ADD_TIME=$("#addTime"),CAL_STATUS=$("#calStatus");
 
 const seed=()=>[];
 
@@ -175,6 +187,67 @@ let D;try{D=JSON.parse(localStorage.getItem(K))}catch(e){}
 if(!Array.isArray(D))D=seed();
 let cur={y:now.getFullYear(),m:now.getMonth()},ed=null,ty="out",cat="",armed=false;
 const put=()=>{try{localStorage.setItem(K,JSON.stringify(D))}catch(e){}};
+
+const DEFAULT_TIMES=["09:00","13:00","17:00","21:00"],timeRx=/^(?:[01]\d|2[0-3]):[0-5]\d$/,
+cleanTimes=a=>[...new Set((Array.isArray(a)?a:[]).filter(t=>timeRx.test(t)))].sort();
+function loadReminderTimes(){
+  try{const saved=cleanTimes(JSON.parse(localStorage.getItem(RK)));if(saved.length)return saved}catch(e){}
+  return [...DEFAULT_TIMES];
+}
+let reminderTimes=loadReminderTimes();
+const persistReminderTimes=()=>{
+  try{localStorage.setItem(RK,JSON.stringify(reminderTimes))}catch(e){}
+  $("#scheduleSummary").textContent=reminderTimes.join(" · ");
+  $("#reminderCount").textContent=reminderTimes.length+" mốc";
+};
+function renderReminderTimes(){
+  TIME_LIST.innerHTML=reminderTimes.map((t,i)=>`<div class="time-row" role="listitem"><span class="time-index">${i+1}</span><input type="time" value="${esc(t)}" data-index="${i}" aria-label="Giờ nhắc ${i+1}"><button class="remove-time" type="button" data-remove="${i}" aria-label="Xóa giờ nhắc ${t}" ${reminderTimes.length===1?"disabled":""}>×</button></div>`).join("");
+  ADD_TIME.disabled=reminderTimes.length>=6;
+  persistReminderTimes();
+}
+const nextReminderTime=()=>{
+  const used=new Set(reminderTimes),minutes=t=>+t.slice(0,2)*60+(+t.slice(3)),clock=m=>pad(Math.floor(m/60))+":"+pad(m%60),
+  last=Math.max(...reminderTimes.map(minutes)),suggested=last+240;
+  if(suggested<1440&&!used.has(clock(suggested)))return clock(suggested);
+  for(let m=360;m<1440;m+=30)if(!used.has(clock(m)))return clock(m);
+  return "12:00";
+};
+const icsEsc=s=>String(s).replace(/\\/g,"\\\\").replace(/\n/g,"\\n").replace(/,/g,"\\,").replace(/;/g,"\\;"),
+icsLocal=d=>d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate())+"T"+pad(d.getHours())+pad(d.getMinutes())+pad(d.getSeconds()),
+reminderTitle=t=>{const h=+t.slice(0,2);return h<11?"Nhớ ghi chi tiêu buổi sáng":h<14?"Bữa trưa có khoản nào cần ghi?":h<19?"Cập nhật chi tiêu chiều nay":"Chốt lại chi tiêu hôm nay"};
+function makeCalendarFile(){
+  const stamp=new Date().toISOString().replace(/[-:]/g,"").replace(/\.\d{3}/,""),
+  day=new Date(now.getFullYear(),now.getMonth(),now.getDate()+1),
+  lines=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//So Chi Tieu//Lich tuy chinh//VI","CALSCALE:GREGORIAN","METHOD:PUBLISH","X-WR-CALNAME:Nhắc ghi chi tiêu","X-WR-CALDESC:Lịch nhắc ghi chi tiêu tùy chỉnh","X-WR-TIMEZONE:Asia/Ho_Chi_Minh","BEGIN:VTIMEZONE","TZID:Asia/Ho_Chi_Minh","X-LIC-LOCATION:Asia/Ho_Chi_Minh","BEGIN:STANDARD","TZOFFSETFROM:+0700","TZOFFSETTO:+0700","TZNAME:ICT","DTSTART:19700101T000000","END:STANDARD","END:VTIMEZONE"];
+  reminderTimes.slice().sort().forEach(t=>{
+    const[h,m]=t.split(":").map(Number),start=new Date(day),summary=reminderTitle(t);
+    start.setHours(h,m,0,0);const end=new Date(start.getTime()+300000);
+    lines.push("BEGIN:VEVENT","UID:expense-reminder-"+t.replace(":","")+"@so-chi-tieu.local","DTSTAMP:"+stamp,"DTSTART;TZID=Asia/Ho_Chi_Minh:"+icsLocal(start),"DTEND;TZID=Asia/Ho_Chi_Minh:"+icsLocal(end),"RRULE:FREQ=DAILY","SUMMARY:"+icsEsc(summary),"DESCRIPTION:"+icsEsc("Mở Sổ chi tiêu và ghi lại khoản vừa chi."),"TRANSP:TRANSPARENT","SEQUENCE:0","BEGIN:VALARM","ACTION:DISPLAY","DESCRIPTION:"+icsEsc(summary),"TRIGGER:PT0M","END:VALARM","END:VEVENT");
+  });
+  lines.push("END:VCALENDAR","");
+  const name="nhac-ghi-chi-tieu-"+reminderTimes.map(t=>t.replace(":","")).join("-")+".ics";
+  return new File([lines.join("\r\n")],name,{type:"text/calendar;charset=utf-8"});
+}
+const rememberCalendarExport=()=>{
+  try{localStorage.setItem("chitieu-reminder-export",JSON.stringify({times:reminderTimes,at:new Date().toISOString()}))}catch(e){}
+};
+const openCalendarFile=(file,download=false)=>{
+  const url=URL.createObjectURL(file),a=document.createElement("a");a.href=url;
+  if(download)a.download=file.name;else{a.target="_blank";a.rel="noopener"}
+  document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);
+};
+const createCalendar=()=>{
+  rememberCalendarExport();openCalendarFile(makeCalendarFile());
+  CAL_STATUS.textContent="Đã tạo lịch "+reminderTimes.join(" · ")+".";
+};
+const shareCalendar=async()=>{
+  const file=makeCalendarFile();rememberCalendarExport();
+  if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
+    try{await navigator.share({title:"Nhắc ghi chi tiêu",text:"Lịch nhắc ghi chi tiêu tùy chỉnh",files:[file]});CAL_STATUS.textContent="Đã mở bảng chia sẻ.";return}
+    catch(e){if(e.name==="AbortError"){CAL_STATUS.textContent="Đã hủy chia sẻ.";return}}
+  }
+  openCalendarFile(file,true);CAL_STATUS.textContent="Đã tải tệp lịch .ics.";
+};
 
 const lab=s=>{const[y,m,d]=s.split("-").map(Number),t=new Date(y,m-1,d),k=Math.round((new Date(now.getFullYear(),now.getMonth(),now.getDate())-t)/864e5);return k===0?"Hôm nay":k===1?"Hôm qua":W[t.getDay()]+", "+pad(d)+"/"+pad(m)};
 const row=x=>`<button class="row" data-id="${x.id}"><span class="ico">${(C[x.t].find(c=>c[1]===x.c)||["📦"])[0]}</span><span class="mid"><b>${esc(x.n||x.c)}</b>${x.n?`<small>${esc(x.c)}</small>`:""}</span><span class="amt ${x.t}">${x.t==="in"?"+":"−"}${vnd(x.a)}</span></button>`;
@@ -201,13 +274,31 @@ function openSheet(x){
 }
 const modalState=()=>document.body.classList.toggle("modal-open",bd.classList.contains("open")||rbd.classList.contains("open"));
 const shut=()=>{bd.classList.remove("open");A.blur();N.blur();modalState()};
-const openReminder=()=>{bd.classList.remove("open");rbd.classList.add("open");modalState();$("#rclose").focus({preventScroll:true})};
+const openReminder=()=>{bd.classList.remove("open");renderReminderTimes();CAL_STATUS.textContent="";rbd.classList.add("open");modalState();$("#rclose").focus({preventScroll:true})};
 const closeReminder=()=>{rbd.classList.remove("open");modalState();$("#remind").focus({preventScroll:true})};
 const step=k=>{const d=new Date(cur.y,cur.m+k,1);cur={y:d.getFullYear(),m:d.getMonth()};render()};
 
 $("#add").onclick=()=>openSheet();
 $("#remind").onclick=openReminder;
 $("#rclose").onclick=closeReminder;
+TIME_LIST.onchange=e=>{
+  const input=e.target.closest('input[type="time"]');if(!input)return;
+  const i=+input.dataset.index,v=input.value;
+  if(!timeRx.test(v)||reminderTimes.some((t,j)=>j!==i&&t===v)){
+    input.value=reminderTimes[i];CAL_STATUS.textContent="Mỗi mốc giờ phải hợp lệ và không được trùng.";return;
+  }
+  reminderTimes[i]=v;reminderTimes.sort();renderReminderTimes();CAL_STATUS.textContent="Đã lưu giờ mới. Hãy tạo và thêm lại lịch.";
+};
+TIME_LIST.onclick=e=>{
+  const b=e.target.closest("[data-remove]");if(!b||reminderTimes.length===1)return;
+  reminderTimes.splice(+b.dataset.remove,1);renderReminderTimes();CAL_STATUS.textContent="Đã xóa mốc giờ. Hãy tạo và thêm lại lịch.";
+};
+ADD_TIME.onclick=()=>{
+  if(reminderTimes.length>=6)return;
+  reminderTimes.push(nextReminderTime());reminderTimes.sort();renderReminderTimes();CAL_STATUS.textContent="Đã thêm mốc giờ mới.";
+};
+CAL.onclick=createCalendar;
+CAL_DOWNLOAD.onclick=shareCalendar;
 $("#list").onclick=e=>{const r=e.target.closest(".row");if(r)openSheet(D.find(x=>x.id==r.dataset.id))};
 $("#seg").onclick=e=>{const b=e.target.closest("button");if(b&&b.dataset.t!==ty){ty=b.dataset.t;cat=C[ty][0][1];seg();chips()}};
 $("#chips").onclick=e=>{const b=e.target.closest("button");if(b){cat=b.dataset.c;chips()}};
@@ -227,12 +318,7 @@ DEL.onclick=()=>{
   if(!armed){armed=true;DEL.textContent="Chạm lần nữa để xóa";return}
   D=D.filter(x=>x.id!==ed.id);put();shut();render();
 };
-render();
-
-const calUrl=new URL("nhac-ghi-chi-tieu.ics",location.href).href,
-isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
-if(isIOS&&/^https?:/.test(calUrl))CAL.href=calUrl.replace(/^https?:/,"webcal:");
-CAL.onclick=()=>{try{localStorage.setItem("chitieu-reminder-opened",new Date().toISOString())}catch(e){}};
+renderReminderTimes();render();
 
 if("serviceWorker" in navigator&&/^https?:$/.test(location.protocol)){
   addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));

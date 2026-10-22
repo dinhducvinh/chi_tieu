@@ -22,19 +22,20 @@ Sau đó mở `http://localhost:8080`.
 ## Cài lịch nhắc
 
 1. Trong ứng dụng, chạm thẻ **Nhắc ghi chi tiêu**.
-2. Chạm **Cài lịch nhắc trên iPhone**.
-3. Cho phép mở Calendar và chọn **Đăng ký**. Bảo đảm cảnh báo của lịch được bật.
+2. Sửa, thêm hoặc xóa các mốc giờ. Có thể tạo tối đa 6 mốc mỗi ngày.
+3. Chạm **Tạo lịch với giờ đã chọn**.
+4. Khi Safari mở tệp lịch, chọn **Thêm tất cả** và bảo đảm cảnh báo được bật.
 
-Lịch tạo bốn lời nhắc lặp lại mỗi ngày lúc 09:00, 13:00, 17:00 và 21:00 theo múi giờ Việt Nam. Cần kết nối mạng khi đăng ký lần đầu; sau đó iPhone Calendar tự phát cảnh báo mà không cần mở PWA hay kết nối tới backend.
+Các mốc mặc định là 09:00, 13:00, 17:00 và 21:00. Lựa chọn mới được lưu trong `localStorage`; ứng dụng tự tạo tệp `.ics` tương ứng ngay trên thiết bị. Nếu Safari không mở trực tiếp tệp lịch, dùng nút **Chia sẻ hoặc lưu tệp .ics**, gửi tệp vào Mail rồi mở tệp đính kèm.
 
-Muốn ngừng nhắc: mở **Calendar** → **Calendars** → nút thông tin cạnh **Nhắc ghi chi tiêu** → **Hủy đăng ký**.
+Khi thay đổi một lịch đã thêm vào Calendar, hãy xóa các chuỗi sự kiện nhắc cũ trước khi nhập lịch mới để tránh nhận thông báo trùng. Muốn ngừng nhắc, xóa các chuỗi sự kiện **Nhắc ghi chi tiêu** trong Calendar.
 
 ## Cấu trúc
 
 - `Chi tiêu tháng.html`: giao diện và logic thu chi.
 - `manifest.webmanifest`: thông tin cài đặt PWA.
 - `sw.js`: bộ nhớ đệm để chạy offline.
-- `nhac-ghi-chi-tieu.ics`: lịch nhắc lặp lại dành cho iPhone.
+- `nhac-ghi-chi-tieu.ics`: lịch mặc định dự phòng; lịch tùy chỉnh được tạo bằng JavaScript.
 - `icons/`: biểu tượng ứng dụng.
 - `tools/generate-icons.ps1`: tạo lại các biểu tượng PNG.
 
