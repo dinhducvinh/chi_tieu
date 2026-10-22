@@ -19,23 +19,21 @@ Sau đó mở `http://localhost:8080`.
 3. Chạm **Chia sẻ** → **Thêm vào Màn hình chính**.
 4. Mở ứng dụng từ biểu tượng vừa tạo ít nhất một lần để hoàn tất bộ nhớ đệm offline.
 
-## Cài lịch nhắc
+## Sao lưu và khôi phục dữ liệu
 
-1. Trong ứng dụng, chạm thẻ **Nhắc ghi chi tiêu**.
-2. Sửa, thêm hoặc xóa các mốc giờ. Có thể tạo tối đa 6 mốc mỗi ngày.
-3. Chạm **Tạo lịch với giờ đã chọn**.
-4. Khi Safari mở tệp lịch, chọn **Thêm tất cả** và bảo đảm cảnh báo được bật.
+Mở tab **Cài đặt** ở thanh dưới cùng:
 
-Các mốc mặc định là 09:00, 13:00, 17:00 và 21:00. Lựa chọn mới được lưu trong `localStorage`; ứng dụng tự tạo tệp `.ics` tương ứng ngay trên thiết bị. Nếu Safari không mở trực tiếp tệp lịch, dùng nút **Chia sẻ hoặc lưu tệp .ics**, gửi tệp vào Mail rồi mở tệp đính kèm.
+- **Xuất dữ liệu** tạo một tệp JSON để lưu vào Files, AirDrop hoặc chia sẻ theo cách bạn muốn.
+- **Nhập dữ liệu** đọc lại tệp JSON và thay thế dữ liệu hiện có sau khi bạn xác nhận.
+- **Xóa sạch dữ liệu** yêu cầu chạm hai lần trong 5 giây để tránh thao tác nhầm.
 
-Khi thay đổi một lịch đã thêm vào Calendar, hãy xóa các chuỗi sự kiện nhắc cũ trước khi nhập lịch mới để tránh nhận thông báo trùng. Muốn ngừng nhắc, xóa các chuỗi sự kiện **Nhắc ghi chi tiêu** trong Calendar.
+Mọi thao tác đều diễn ra ngay trên thiết bị, không cần tài khoản hay máy chủ. Nên xuất một bản sao trước khi xóa dữ liệu hoặc đổi điện thoại.
 
 ## Cấu trúc
 
 - `Chi tiêu tháng.html`: giao diện và logic thu chi.
 - `manifest.webmanifest`: thông tin cài đặt PWA.
 - `sw.js`: bộ nhớ đệm để chạy offline.
-- `nhac-ghi-chi-tieu.ics`: lịch mặc định dự phòng; lịch tùy chỉnh được tạo bằng JavaScript.
 - `icons/`: biểu tượng ứng dụng.
 - `tools/generate-icons.ps1`: tạo lại các biểu tượng PNG.
 

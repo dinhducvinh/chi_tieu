@@ -24,7 +24,8 @@ button,input{font:inherit;color:inherit}
 button{cursor:pointer}
 [hidden]{display:none!important}
 :focus-visible{outline:2px solid var(--acc);outline-offset:2px}
-.app{max-width:430px;margin:0 auto;padding:10px 20px 130px}
+.app{max-width:430px;margin:0 auto;padding:10px 20px 190px}
+.settings-view{padding-bottom:100px}
 .nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:26px}
 .nav b{font-weight:600}
 .nav button{width:40px;height:40px;margin:0 -10px;border:0;background:none;font-size:26px;line-height:1}
@@ -34,12 +35,6 @@ button{cursor:pointer}
 .big small{font-size:24px;font-weight:600;letter-spacing:0;margin-left:4px;color:var(--mute)}
 .sub{display:flex;justify-content:space-between;font-size:14px;color:var(--mute)}
 .sub b{font-weight:600;color:var(--in);font-variant-numeric:tabular-nums}
-.remind{display:flex;align-items:center;gap:12px;width:100%;margin:24px 0 4px;padding:13px 14px;border:1px solid var(--line);border-radius:16px;background:var(--sheet);text-align:left;box-shadow:0 6px 24px rgba(14,42,51,.04)}
-.remind-ico{display:grid;flex:none;width:38px;height:38px;place-items:center;border-radius:12px;background:color-mix(in srgb,var(--acc) 13%,transparent);font-size:20px}
-.remind-copy{flex:1;min-width:0}
-.remind-copy b{display:block;font-size:14px;font-weight:600}
-.remind-copy small{display:block;margin-top:2px;overflow:hidden;color:var(--mute);font-size:12px;text-overflow:ellipsis;white-space:nowrap}
-.chev{flex:none;color:var(--mute);font-size:24px;line-height:1}
 .day{font-size:13px;font-weight:600;color:var(--mute);margin:30px 0 2px}
 .row{display:flex;align-items:center;gap:14px;width:100%;padding:13px 0;border:0;border-bottom:1px solid var(--line);background:none;text-align:left}
 .ico{flex:none;width:28px;text-align:center;font-size:22px}
@@ -49,9 +44,37 @@ button{cursor:pointer}
 .amt{font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums}
 .amt.in{color:var(--in)}
 .empty{padding:64px 12px;text-align:center;color:var(--mute);line-height:1.6}
-.dock{position:fixed;left:0;right:0;bottom:0;z-index:5;padding:30px 20px calc(14px + env(safe-area-inset-bottom,0px));background:linear-gradient(to top,var(--bg) 55%,transparent);pointer-events:none}
+.settings-head{padding:8px 0 22px}
+.settings-head h1{margin:0 0 6px;font-size:32px;letter-spacing:-.025em}
+.settings-head p{margin:0;color:var(--mute);font-size:14px;line-height:1.55}
+.settings-card{overflow:hidden;margin-bottom:18px;border:1px solid var(--line);border-radius:18px;background:var(--sheet);box-shadow:0 6px 24px rgba(14,42,51,.04)}
+.data-overview{display:flex;align-items:center;gap:12px;padding:16px}
+.data-icon{display:grid;flex:none;width:42px;height:42px;place-items:center;border-radius:13px;background:var(--bg);font-size:21px}
+.data-overview b{display:block;font-size:15px}
+.data-overview small{display:block;margin-top:2px;color:var(--mute);font-size:12px}
+.setting-action{display:flex;align-items:center;gap:12px;width:100%;min-height:58px;padding:10px 16px;border:0;border-top:1px solid var(--line);background:none;text-align:left}
+.setting-action .action-icon{display:grid;flex:none;width:32px;height:32px;place-items:center;border-radius:10px;background:var(--bg);font-weight:700}
+.setting-action .action-copy{flex:1}
+.setting-action b{display:block;font-size:14px;font-weight:600}
+.setting-action small{display:block;margin-top:1px;color:var(--mute);font-size:12px}
+.setting-action .arrow{color:var(--mute);font-size:21px}
+.privacy-note{margin:4px 4px 22px;color:var(--mute);font-size:12px;line-height:1.55}
+.settings-status{min-height:20px;margin:0 4px 18px;color:var(--in);font-size:13px;line-height:1.45}
+.settings-status[data-tone="error"]{color:var(--acc)}
+.settings-status[data-tone="warn"]{color:var(--ink)}
+.danger-card{padding:16px;border:1px solid color-mix(in srgb,var(--acc) 40%,var(--line));border-radius:18px;background:var(--sheet)}
+.danger-card h2{margin:0 0 5px;font-size:16px}
+.danger-card p{margin:0 0 14px;color:var(--mute);font-size:13px;line-height:1.5}
+.danger-button{width:100%;min-height:48px;padding:8px 14px;border:1px solid var(--acc);border-radius:13px;background:none;color:var(--acc);font-weight:600}
+.danger-button.armed{background:var(--acc);color:var(--acc-ink)}
+.dock{position:fixed;left:0;right:0;bottom:calc(64px + env(safe-area-inset-bottom,0px));z-index:5;padding:28px 20px 10px;background:linear-gradient(to top,var(--bg) 55%,transparent);pointer-events:none}
 .add{pointer-events:auto;display:block;width:100%;max-width:390px;height:54px;margin:0 auto;border:0;border-radius:16px;background:var(--acc);color:var(--acc-ink);font-size:16px;font-weight:600}
 .add:active{transform:scale(.98)}
+.tabbar{position:fixed;right:0;bottom:0;left:0;z-index:6;border-top:1px solid var(--line);background:color-mix(in srgb,var(--sheet) 94%,transparent);padding:5px 16px calc(5px + env(safe-area-inset-bottom,0px));backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.tabbar-inner{display:flex;max-width:430px;margin:0 auto}
+.tab{display:flex;flex:1;min-height:54px;align-items:center;justify-content:center;gap:7px;border:0;border-radius:12px;background:none;color:var(--mute);font-size:12px;font-weight:600}
+.tab .tab-icon{font-size:20px;line-height:1}
+.tab.on{color:var(--acc)}
 .bd{position:fixed;inset:0;z-index:10;display:flex;align-items:flex-end;justify-content:center;background:rgba(7,18,22,.5);opacity:0;pointer-events:none;transition:opacity .2s}
 .bd.open{opacity:1;pointer-events:auto}
 .sheet{width:100%;max-width:430px;max-height:94%;overflow:auto;background:var(--sheet);border-radius:28px 28px 0 0;padding:10px 20px calc(18px + env(safe-area-inset-bottom,0px));transform:translateY(100%);transition:transform .26s cubic-bezier(.2,.8,.2,1)}
@@ -76,38 +99,12 @@ button{cursor:pointer}
 .ok{width:100%;height:54px;border:0;border-radius:16px;background:var(--ink);color:var(--bg);font-size:16px;font-weight:600}
 .ok:disabled{opacity:.25}
 .del{width:100%;height:46px;margin-top:6px;border:0;background:none;color:var(--acc);font-weight:500}
-.sheet-head{margin:4px 0 20px}
-.sheet-head h2{margin:0 0 6px;font-size:24px;letter-spacing:-.02em}
-.sheet-head p{margin:0;color:var(--mute);font-size:14px;line-height:1.55}
-.install-card{margin:0 0 14px;padding:15px;border:1px solid var(--line);border-radius:16px;background:var(--bg)}
-.install-card h3{display:flex;align-items:center;gap:8px;margin:0 0 8px;font-size:15px}
-.install-card p{margin:0;color:var(--mute);font-size:13px;line-height:1.55}
-.schedule-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-.schedule-head h3{margin:0}
-.schedule-count{color:var(--mute);font-size:12px;font-weight:500}
-.time-list{display:grid;gap:8px;margin:10px 0}
-.time-row{display:flex;align-items:center;gap:10px;padding:8px;border:1px solid var(--line);border-radius:12px;background:var(--sheet)}
-.time-index{display:grid;flex:none;width:26px;height:26px;place-items:center;border-radius:8px;background:var(--bg);color:var(--mute);font-size:12px;font-weight:600}
-.time-row input{flex:1;min-width:0;height:38px;padding:0 10px;border:0;border-radius:9px;background:var(--bg);font-size:16px;font-weight:600;font-variant-numeric:tabular-nums}
-.remove-time{display:grid;flex:none;width:36px;height:36px;place-items:center;border:0;border-radius:9px;background:none;color:var(--acc);font-size:22px;line-height:1}
-.remove-time:disabled{visibility:hidden}
-.add-time{width:100%;height:40px;margin:2px 0 10px;border:1px dashed var(--line);border-radius:11px;background:none;color:var(--ink);font-size:13px;font-weight:600}
-.add-time:disabled{opacity:.4}
-.cal{display:flex;align-items:center;justify-content:center;width:100%;height:54px;margin-top:18px;border:0;border-radius:16px;background:var(--acc);color:var(--acc-ink);font-weight:600;text-decoration:none}
-.cal:active{transform:scale(.98)}
-.cal-fallback{display:block;width:100%;padding:13px 0;border:0;background:none;color:var(--mute);font-size:13px;text-align:center;text-decoration:underline;text-underline-offset:3px}
-.cal-status{min-height:18px;margin:0;text-align:center;color:var(--in);font-size:12px}
-.steps{margin:18px 0 10px;padding:0;list-style:none;counter-reset:step}
-.steps li{display:flex;gap:10px;margin:10px 0;color:var(--mute);font-size:13px;line-height:1.5;counter-increment:step}
-.steps li::before{content:counter(step);display:grid;flex:none;width:22px;height:22px;place-items:center;border-radius:50%;background:var(--ink);color:var(--bg);font-size:11px;font-weight:700}
-.fine{margin:12px 2px 2px;color:var(--mute);font-size:12px;line-height:1.5}
-.close-sheet{width:100%;height:48px;margin-top:8px;border:1px solid var(--line);border-radius:14px;background:none;font-weight:600}
 body.modal-open{overflow:hidden}
-@supports not (color:color-mix(in srgb,black,white)){.remind-ico{background:rgba(194,37,92,.12)}}
+@supports not (color:color-mix(in srgb,black,white)){.tabbar{background:var(--sheet)}.danger-card{border-color:var(--line)}}
 </style>
 </head>
 <body>
-<div class="app">
+<main class="app" id="ledgerView">
   <div class="nav">
     <button id="prev" aria-label="Tháng trước">‹</button>
     <b id="mo"></b>
@@ -116,15 +113,48 @@ body.modal-open{overflow:hidden}
   <div class="lbl">Đã chi trong tháng</div>
   <div class="big"><span id="out">0</span><small>đ</small></div>
   <div class="sub"><span>Đã thu <b id="in">0đ</b></span><span><span id="cnt">0</span> giao dịch</span></div>
-  <button class="remind" id="remind" type="button" aria-haspopup="dialog">
-    <span class="remind-ico" aria-hidden="true">🔔</span>
-    <span class="remind-copy"><b>Nhắc ghi chi tiêu</b><small id="scheduleSummary">09:00 · 13:00 · 17:00 · 21:00</small></span>
-    <span class="chev" aria-hidden="true">›</span>
-  </button>
   <div id="list"></div>
-</div>
+</main>
 
-<div class="dock"><button class="add" id="add">Thêm giao dịch</button></div>
+<main class="app settings-view" id="settingsView" hidden>
+  <header class="settings-head">
+    <h1>Cài đặt</h1>
+    <p>Sao lưu hoặc quản lý dữ liệu đang lưu trên thiết bị này.</p>
+  </header>
+  <section class="settings-card" aria-labelledby="dataTitle">
+    <div class="data-overview">
+      <span class="data-icon" aria-hidden="true">▤</span>
+      <span><b id="dataTitle">Dữ liệu thu chi</b><small id="dataStats">0 giao dịch · 0 B</small></span>
+    </div>
+    <button class="setting-action" id="exportData" type="button">
+      <span class="action-icon" aria-hidden="true">↓</span>
+      <span class="action-copy"><b>Xuất dữ liệu</b><small>Lưu một bản sao JSON</small></span>
+      <span class="arrow" aria-hidden="true">›</span>
+    </button>
+    <button class="setting-action" id="importData" type="button">
+      <span class="action-icon" aria-hidden="true">↑</span>
+      <span class="action-copy"><b>Nhập dữ liệu</b><small>Khôi phục từ tệp JSON</small></span>
+      <span class="arrow" aria-hidden="true">›</span>
+    </button>
+    <input id="importFile" type="file" accept=".json,application/json" hidden>
+  </section>
+  <p class="privacy-note">Dữ liệu chỉ được xử lý trên thiết bị. Ứng dụng không tải nội dung thu chi lên máy chủ.</p>
+  <p class="settings-status" id="settingsStatus" role="status" aria-live="polite"></p>
+  <section class="danger-card" aria-labelledby="deleteTitle">
+    <h2 id="deleteTitle">Xóa sạch dữ liệu</h2>
+    <p>Xóa vĩnh viễn toàn bộ giao dịch trên thiết bị này. Hãy xuất bản sao trước nếu cần giữ lại.</p>
+    <button class="danger-button" id="deleteAll" type="button">Xóa toàn bộ giao dịch</button>
+  </section>
+</main>
+
+<div class="dock" id="addDock"><button class="add" id="add">Thêm giao dịch</button></div>
+
+<nav class="tabbar" aria-label="Điều hướng chính">
+  <div class="tabbar-inner" role="tablist">
+    <button class="tab on" id="tabLedger" type="button" role="tab" aria-selected="true" aria-controls="ledgerView"><span class="tab-icon" aria-hidden="true">▤</span><span>Chi tiêu</span></button>
+    <button class="tab" id="tabSettings" type="button" role="tab" aria-selected="false" aria-controls="settingsView"><span class="tab-icon" aria-hidden="true">⚙</span><span>Cài đặt</span></button>
+  </div>
+</nav>
 
 <div class="bd" id="bd">
   <div class="sheet" role="dialog" aria-modal="true" aria-label="Giao dịch">
@@ -138,39 +168,9 @@ body.modal-open{overflow:hidden}
   </div>
 </div>
 
-<div class="bd" id="rbd">
-  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="reminder-title">
-    <div class="grab"></div>
-    <div class="sheet-head">
-      <h2 id="reminder-title">Nhắc ghi chi tiêu</h2>
-      <p>Dùng lịch của iPhone để nhắc ngay cả khi ứng dụng đã đóng hoặc điện thoại không có mạng.</p>
-    </div>
-    <div class="install-card">
-      <div class="schedule-head"><h3><span aria-hidden="true">📅</span> Chọn giờ nhắc</h3><span class="schedule-count" id="reminderCount">4 mốc</span></div>
-      <div class="time-list" id="times" aria-label="Các giờ nhắc"></div>
-      <button class="add-time" id="addTime" type="button">＋ Thêm giờ nhắc</button>
-      <p>Chọn tối đa 6 mốc. Các giờ được lưu riêng trên thiết bị này.</p>
-    </div>
-    <div class="install-card">
-      <h3><span aria-hidden="true">📱</span> Cài ứng dụng trên iPhone</h3>
-      <p>Mở trang bằng Safari, chạm <b>Chia sẻ</b>, rồi chọn <b>Thêm vào Màn hình chính</b>. Sau lần mở đầu tiên, ứng dụng có thể dùng offline.</p>
-    </div>
-    <button class="cal" id="cal" type="button">Tạo lịch với giờ đã chọn</button>
-    <button class="cal-fallback" id="calDownload" type="button">Chia sẻ hoặc lưu tệp .ics</button>
-    <p class="cal-status" id="calStatus" role="status" aria-live="polite"></p>
-    <ol class="steps">
-      <li><span>Chỉnh các mốc giờ rồi chạm <b>Tạo lịch với giờ đã chọn</b>.</span></li>
-      <li><span>Khi Safari mở tệp lịch, chọn <b>Thêm tất cả</b> và bảo đảm cảnh báo được bật.</span></li>
-      <li><span>Nếu đổi lịch đã cài, hãy xóa các chuỗi nhắc cũ trong Calendar trước khi thêm lịch mới để tránh báo trùng.</span></li>
-    </ol>
-    <p class="fine">Tệp lịch được tạo ngay trên điện thoại, không đọc hay tải lên dữ liệu thu chi. Sau khi thêm, Calendar nhắc độc lập kể cả khi PWA đã đóng.</p>
-    <button class="close-sheet" id="rclose" type="button">Đóng</button>
-  </div>
-</div>
-
 <script>
 (()=>{
-const $=s=>document.querySelector(s),K="chitieu-demo-v1",RK="chitieu-reminder-times-v1",
+const $=s=>document.querySelector(s),K="chitieu-demo-v1",LEGACY_KEYS=["chitieu-reminder-times-v1","chitieu-reminder-export","chitieu-reminder-opened"],
 W=["Chủ nhật","Thứ Hai","Thứ Ba","Thứ Tư","Thứ Năm","Thứ Sáu","Thứ Bảy"],
 C={out:[["🍜","Ăn uống"],["🛵","Đi lại"],["🛍️","Mua sắm"],["🏠","Nhà ở"],["💡","Hóa đơn"],["🎬","Giải trí"],["📦","Khác"]],in:[["💼","Lương"],["🎁","Thưởng"],["💰","Khác"]]},
 num=n=>String(n).replace(/\B(?=(\d{3})+(?!\d))/g,"."),
@@ -179,75 +179,87 @@ pad=n=>String(n).padStart(2,"0"),
 iso=d=>d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate()),
 esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])),
 now=new Date(),
-bd=$("#bd"),rbd=$("#rbd"),A=$("#a"),N=$("#n"),DT=$("#dt"),OK=$("#ok"),DEL=$("#del"),CAL=$("#cal"),CAL_DOWNLOAD=$("#calDownload"),TIME_LIST=$("#times"),ADD_TIME=$("#addTime"),CAL_STATUS=$("#calStatus");
+bd=$("#bd"),A=$("#a"),N=$("#n"),DT=$("#dt"),OK=$("#ok"),DEL=$("#del"),IMPORT_FILE=$("#importFile"),SETTINGS_STATUS=$("#settingsStatus"),DELETE_ALL=$("#deleteAll");
 
 const seed=()=>[];
 
 let D;try{D=JSON.parse(localStorage.getItem(K))}catch(e){}
 if(!Array.isArray(D))D=seed();
-let cur={y:now.getFullYear(),m:now.getMonth()},ed=null,ty="out",cat="",armed=false;
-const put=()=>{try{localStorage.setItem(K,JSON.stringify(D))}catch(e){}};
-
-const DEFAULT_TIMES=["09:00","13:00","17:00","21:00"],timeRx=/^(?:[01]\d|2[0-3]):[0-5]\d$/,
-cleanTimes=a=>[...new Set((Array.isArray(a)?a:[]).filter(t=>timeRx.test(t)))].sort();
-function loadReminderTimes(){
-  try{const saved=cleanTimes(JSON.parse(localStorage.getItem(RK)));if(saved.length)return saved}catch(e){}
-  return [...DEFAULT_TIMES];
+let cur={y:now.getFullYear(),m:now.getMonth()},ed=null,ty="out",cat="",armed=false,clearArmed=false,clearTimer;
+const persist=data=>{try{localStorage.setItem(K,JSON.stringify(data));return true}catch(e){return false}},put=()=>persist(D);
+const setStatus=(text,tone="")=>{SETTINGS_STATUS.textContent=text;if(tone)SETTINGS_STATUS.dataset.tone=tone;else SETTINGS_STATUS.removeAttribute("data-tone")};
+const dataSize=()=>{try{return new Blob([JSON.stringify(D)]).size}catch(e){return 0}};
+const formatSize=n=>n<1024?n+" B":(n/1024).toLocaleString("vi-VN",{maximumFractionDigits:1})+" KB";
+function updateDataStats(){
+  $("#dataStats").textContent=D.length+" giao dịch · "+formatSize(dataSize());
 }
-let reminderTimes=loadReminderTimes();
-const persistReminderTimes=()=>{
-  try{localStorage.setItem(RK,JSON.stringify(reminderTimes))}catch(e){}
-  $("#scheduleSummary").textContent=reminderTimes.join(" · ");
-  $("#reminderCount").textContent=reminderTimes.length+" mốc";
-};
-function renderReminderTimes(){
-  TIME_LIST.innerHTML=reminderTimes.map((t,i)=>`<div class="time-row" role="listitem"><span class="time-index">${i+1}</span><input type="time" value="${esc(t)}" data-index="${i}" aria-label="Giờ nhắc ${i+1}"><button class="remove-time" type="button" data-remove="${i}" aria-label="Xóa giờ nhắc ${t}" ${reminderTimes.length===1?"disabled":""}>×</button></div>`).join("");
-  ADD_TIME.disabled=reminderTimes.length>=6;
-  persistReminderTimes();
+function disarmClear(){
+  clearTimeout(clearTimer);clearTimer=null;clearArmed=false;DELETE_ALL.classList.remove("armed");DELETE_ALL.textContent="Xóa toàn bộ giao dịch";
 }
-const nextReminderTime=()=>{
-  const used=new Set(reminderTimes),minutes=t=>+t.slice(0,2)*60+(+t.slice(3)),clock=m=>pad(Math.floor(m/60))+":"+pad(m%60),
-  last=Math.max(...reminderTimes.map(minutes)),suggested=last+240;
-  if(suggested<1440&&!used.has(clock(suggested)))return clock(suggested);
-  for(let m=360;m<1440;m+=30)if(!used.has(clock(m)))return clock(m);
-  return "12:00";
-};
-const icsEsc=s=>String(s).replace(/\\/g,"\\\\").replace(/\n/g,"\\n").replace(/,/g,"\\,").replace(/;/g,"\\;"),
-icsLocal=d=>d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate())+"T"+pad(d.getHours())+pad(d.getMinutes())+pad(d.getSeconds()),
-reminderTitle=t=>{const h=+t.slice(0,2);return h<11?"Nhớ ghi chi tiêu buổi sáng":h<14?"Bữa trưa có khoản nào cần ghi?":h<19?"Cập nhật chi tiêu chiều nay":"Chốt lại chi tiêu hôm nay"};
-function makeCalendarFile(){
-  const stamp=new Date().toISOString().replace(/[-:]/g,"").replace(/\.\d{3}/,""),
-  day=new Date(now.getFullYear(),now.getMonth(),now.getDate()+1),
-  lines=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//So Chi Tieu//Lich tuy chinh//VI","CALSCALE:GREGORIAN","METHOD:PUBLISH","X-WR-CALNAME:Nhắc ghi chi tiêu","X-WR-CALDESC:Lịch nhắc ghi chi tiêu tùy chỉnh","X-WR-TIMEZONE:Asia/Ho_Chi_Minh","BEGIN:VTIMEZONE","TZID:Asia/Ho_Chi_Minh","X-LIC-LOCATION:Asia/Ho_Chi_Minh","BEGIN:STANDARD","TZOFFSETFROM:+0700","TZOFFSETTO:+0700","TZNAME:ICT","DTSTART:19700101T000000","END:STANDARD","END:VTIMEZONE"];
-  reminderTimes.slice().sort().forEach(t=>{
-    const[h,m]=t.split(":").map(Number),start=new Date(day),summary=reminderTitle(t);
-    start.setHours(h,m,0,0);const end=new Date(start.getTime()+300000);
-    lines.push("BEGIN:VEVENT","UID:expense-reminder-"+t.replace(":","")+"@so-chi-tieu.local","DTSTAMP:"+stamp,"DTSTART;TZID=Asia/Ho_Chi_Minh:"+icsLocal(start),"DTEND;TZID=Asia/Ho_Chi_Minh:"+icsLocal(end),"RRULE:FREQ=DAILY","SUMMARY:"+icsEsc(summary),"DESCRIPTION:"+icsEsc("Mở Sổ chi tiêu và ghi lại khoản vừa chi."),"TRANSP:TRANSPARENT","SEQUENCE:0","BEGIN:VALARM","ACTION:DISPLAY","DESCRIPTION:"+icsEsc(summary),"TRIGGER:PT0M","END:VALARM","END:VEVENT");
-  });
-  lines.push("END:VCALENDAR","");
-  const name="nhac-ghi-chi-tieu-"+reminderTimes.map(t=>t.replace(":","")).join("-")+".ics";
-  return new File([lines.join("\r\n")],name,{type:"text/calendar;charset=utf-8"});
+function showTab(name){
+  const settings=name==="settings";
+  $("#ledgerView").hidden=settings;$("#settingsView").hidden=!settings;$("#addDock").hidden=settings;
+  $("#tabLedger").classList.toggle("on",!settings);$("#tabSettings").classList.toggle("on",settings);
+  $("#tabLedger").setAttribute("aria-selected",String(!settings));$("#tabSettings").setAttribute("aria-selected",String(settings));
+  disarmClear();if(settings)updateDataStats();scrollTo(0,0);
 }
-const rememberCalendarExport=()=>{
-  try{localStorage.setItem("chitieu-reminder-export",JSON.stringify({times:reminderTimes,at:new Date().toISOString()}))}catch(e){}
+const makeBackupFile=()=>new File([JSON.stringify({app:"so-chi-tieu",version:1,exportedAt:new Date().toISOString(),transactions:D},null,2)],"so-chi-tieu-"+iso(new Date())+".json",{type:"application/json;charset=utf-8"});
+const downloadFile=file=>{
+  const url=URL.createObjectURL(file),a=document.createElement("a");a.href=url;a.download=file.name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);
 };
-const openCalendarFile=(file,download=false)=>{
-  const url=URL.createObjectURL(file),a=document.createElement("a");a.href=url;
-  if(download)a.download=file.name;else{a.target="_blank";a.rel="noopener"}
-  document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);
-};
-const createCalendar=()=>{
-  rememberCalendarExport();openCalendarFile(makeCalendarFile());
-  CAL_STATUS.textContent="Đã tạo lịch "+reminderTimes.join(" · ")+".";
-};
-const shareCalendar=async()=>{
-  const file=makeCalendarFile();rememberCalendarExport();
-  if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
-    try{await navigator.share({title:"Nhắc ghi chi tiêu",text:"Lịch nhắc ghi chi tiêu tùy chỉnh",files:[file]});CAL_STATUS.textContent="Đã mở bảng chia sẻ.";return}
-    catch(e){if(e.name==="AbortError"){CAL_STATUS.textContent="Đã hủy chia sẻ.";return}}
+async function exportData(){
+  const file=makeBackupFile();let canShare=false;
+  try{canShare=!!(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]}))}catch(e){}
+  if(canShare){
+    try{await navigator.share({title:"Sao lưu Sổ chi tiêu",text:"Dữ liệu thu chi của tôi",files:[file]});setStatus("Đã mở bảng chia sẻ bản sao dữ liệu.");return}
+    catch(e){if(e.name==="AbortError"){setStatus("Đã hủy xuất dữ liệu.","warn");return}}
   }
-  openCalendarFile(file,true);CAL_STATUS.textContent="Đã tải tệp lịch .ics.";
-};
+  downloadFile(file);setStatus("Đã tạo tệp "+file.name+".");
+}
+const DATE_RX=/^(\d{4})-(\d{2})-(\d{2})$/;
+function validDate(value){
+  const m=DATE_RX.exec(value);if(!m)return false;
+  const y=+m[1],mo=+m[2],d=+m[3],date=new Date(Date.UTC(y,mo-1,d));
+  return y>=1900&&y<=9999&&date.getUTCFullYear()===y&&date.getUTCMonth()===mo-1&&date.getUTCDate()===d;
+}
+function normalizeTransactions(items){
+  if(!Array.isArray(items))throw new Error("Tệp không có danh sách giao dịch.");
+  if(items.length>20000)throw new Error("Tệp có quá nhiều giao dịch.");
+  const reserved=new Set(items.map(x=>x&&x.id).filter(id=>Number.isSafeInteger(id)&&id>0)),used=new Set();let nextId=Date.now();
+  const freshId=()=>{while(reserved.has(nextId)||used.has(nextId))nextId++;return nextId++};
+  return items.map((x,i)=>{
+    const fail=message=>{throw new Error("Giao dịch "+(i+1)+": "+message+".")};
+    if(!x||Object.getPrototypeOf(x)!==Object.prototype)fail("dữ liệu không hợp lệ");
+    if(x.t!=="out"&&x.t!=="in")fail("loại thu/chi không hợp lệ");
+    if(!Number.isSafeInteger(x.a)||x.a<1||x.a>999999999999)fail("số tiền không hợp lệ");
+    if(typeof x.d!=="string"||!validDate(x.d))fail("ngày không hợp lệ");
+    if(typeof x.c!=="string"||!x.c.trim()||x.c.length>40)fail("danh mục không hợp lệ");
+    if(x.n!=null&&(typeof x.n!=="string"||x.n.length>40))fail("ghi chú không hợp lệ");
+    let id=x.id;if(!Number.isSafeInteger(id)||id<1||used.has(id))id=freshId();used.add(id);
+    return{id,t:x.t,a:x.a,c:x.c.trim(),n:(x.n||"").trim(),d:x.d};
+  });
+}
+async function importData(file){
+  try{
+    if(!file)return;
+    if(!file.size)throw new Error("Tệp đang trống.");
+    if(file.size>5*1024*1024)throw new Error("Tệp lớn hơn giới hạn 5 MB.");
+    const parsed=JSON.parse((await file.text()).replace(/^\uFEFF/,""));let items;
+    if(Array.isArray(parsed))items=parsed;
+    else if(parsed&&Object.getPrototypeOf(parsed)===Object.prototype&&Array.isArray(parsed.transactions)){
+      if("app" in parsed&&parsed.app!=="so-chi-tieu")throw new Error("Tệp không thuộc Sổ chi tiêu.");
+      if("version" in parsed&&parsed.version!==1)throw new Error("Phiên bản tệp chưa được hỗ trợ.");
+      items=parsed.transactions;
+    }else throw new Error("Cấu trúc tệp không đúng.");
+    const imported=normalizeTransactions(items);
+    if(!confirm("Nhập "+imported.length+" giao dịch và thay thế toàn bộ dữ liệu hiện tại?")){setStatus("Đã hủy nhập dữ liệu.","warn");return}
+    if(!persist(imported))throw new Error("Không thể lưu dữ liệu trên thiết bị.");
+    D=imported;const latest=D.reduce((value,x)=>x.d>value?x.d:value,"");
+    if(latest){const p=latest.split("-");cur={y:+p[0],m:+p[1]-1}}else{const d=new Date();cur={y:d.getFullYear(),m:d.getMonth()}}
+    render();setStatus("Đã nhập thành công "+D.length+" giao dịch.");
+  }catch(e){setStatus("Không thể nhập: "+(e&&e.message?e.message:"tệp không hợp lệ"),"error")}
+  finally{IMPORT_FILE.value=""}
+}
 
 const lab=s=>{const[y,m,d]=s.split("-").map(Number),t=new Date(y,m-1,d),k=Math.round((new Date(now.getFullYear(),now.getMonth(),now.getDate())-t)/864e5);return k===0?"Hôm nay":k===1?"Hôm qua":W[t.getDay()]+", "+pad(d)+"/"+pad(m)};
 const row=x=>`<button class="row" data-id="${x.id}"><span class="ico">${(C[x.t].find(c=>c[1]===x.c)||["📦"])[0]}</span><span class="mid"><b>${esc(x.n||x.c)}</b>${x.n?`<small>${esc(x.c)}</small>`:""}</span><span class="amt ${x.t}">${x.t==="in"?"+":"−"}${vnd(x.a)}</span></button>`;
@@ -261,51 +273,43 @@ function render(){
   let h="",last="";
   for(const x of L){if(x.d!==last){h+=(last?"</div>":"")+`<div class="day">${lab(x.d)}</div><div>`;last=x.d}h+=row(x)}
   $("#list").innerHTML=last?h+"</div>":`<div class="empty">Tháng này chưa có giao dịch nào.<br>Bấm “Thêm giao dịch” để ghi khoản đầu tiên.</div>`;
+  updateDataStats();
 }
 const seg=()=>{document.querySelectorAll("#seg button").forEach(b=>b.classList.toggle("on",b.dataset.t===ty));$(".amtbox").classList.toggle("in",ty==="in")};
 const chips=()=>{$("#chips").innerHTML=C[ty].map(c=>`<button data-c="${c[1]}" class="${c[1]===cat?"on":""}">${c[0]} ${c[1]}</button>`).join("")};
 const amt=()=>{const v=A.value.replace(/\D/g,"").replace(/^0+/,"").slice(0,12);A.value=v?num(v):"";A.style.width=(A.value.length||1)+"ch";OK.disabled=!v};
 function openSheet(x){
-  rbd.classList.remove("open");
   ed=x||null;ty=x?x.t:"out";cat=x?x.c:C[ty][0][1];armed=false;
   A.value=x?num(x.a):"";N.value=x?x.n:"";DT.value=x?x.d:iso(now);
   DEL.hidden=!x;DEL.textContent="Xóa giao dịch";seg();chips();amt();bd.classList.add("open");document.body.classList.add("modal-open");
   if(!x)A.focus({preventScroll:true});
 }
-const modalState=()=>document.body.classList.toggle("modal-open",bd.classList.contains("open")||rbd.classList.contains("open"));
+const modalState=()=>document.body.classList.toggle("modal-open",bd.classList.contains("open"));
 const shut=()=>{bd.classList.remove("open");A.blur();N.blur();modalState()};
-const openReminder=()=>{bd.classList.remove("open");renderReminderTimes();CAL_STATUS.textContent="";rbd.classList.add("open");modalState();$("#rclose").focus({preventScroll:true})};
-const closeReminder=()=>{rbd.classList.remove("open");modalState();$("#remind").focus({preventScroll:true})};
 const step=k=>{const d=new Date(cur.y,cur.m+k,1);cur={y:d.getFullYear(),m:d.getMonth()};render()};
 
 $("#add").onclick=()=>openSheet();
-$("#remind").onclick=openReminder;
-$("#rclose").onclick=closeReminder;
-TIME_LIST.onchange=e=>{
-  const input=e.target.closest('input[type="time"]');if(!input)return;
-  const i=+input.dataset.index,v=input.value;
-  if(!timeRx.test(v)||reminderTimes.some((t,j)=>j!==i&&t===v)){
-    input.value=reminderTimes[i];CAL_STATUS.textContent="Mỗi mốc giờ phải hợp lệ và không được trùng.";return;
+$("#tabLedger").onclick=()=>showTab("ledger");
+$("#tabSettings").onclick=()=>showTab("settings");
+$("#exportData").onclick=exportData;
+$("#importData").onclick=()=>IMPORT_FILE.click();
+IMPORT_FILE.onchange=()=>importData(IMPORT_FILE.files[0]);
+DELETE_ALL.onclick=()=>{
+  if(!clearArmed){
+    clearArmed=true;DELETE_ALL.classList.add("armed");DELETE_ALL.textContent="Chạm lần nữa để xóa vĩnh viễn";
+    setStatus("Chạm lại nút xóa trong 5 giây để xác nhận.","warn");
+    clearTimer=setTimeout(()=>{disarmClear();setStatus("Đã hủy yêu cầu xóa.","warn")},5000);return;
   }
-  reminderTimes[i]=v;reminderTimes.sort();renderReminderTimes();CAL_STATUS.textContent="Đã lưu giờ mới. Hãy tạo và thêm lại lịch.";
+  try{localStorage.removeItem(K)}catch(e){disarmClear();setStatus("Không thể xóa dữ liệu trên thiết bị.","error");return}
+  LEGACY_KEYS.forEach(key=>{try{localStorage.removeItem(key)}catch(e){}});
+  D=[];const d=new Date();cur={y:d.getFullYear(),m:d.getMonth()};disarmClear();render();setStatus("Đã xóa toàn bộ dữ liệu thu chi.");
 };
-TIME_LIST.onclick=e=>{
-  const b=e.target.closest("[data-remove]");if(!b||reminderTimes.length===1)return;
-  reminderTimes.splice(+b.dataset.remove,1);renderReminderTimes();CAL_STATUS.textContent="Đã xóa mốc giờ. Hãy tạo và thêm lại lịch.";
-};
-ADD_TIME.onclick=()=>{
-  if(reminderTimes.length>=6)return;
-  reminderTimes.push(nextReminderTime());reminderTimes.sort();renderReminderTimes();CAL_STATUS.textContent="Đã thêm mốc giờ mới.";
-};
-CAL.onclick=createCalendar;
-CAL_DOWNLOAD.onclick=shareCalendar;
 $("#list").onclick=e=>{const r=e.target.closest(".row");if(r)openSheet(D.find(x=>x.id==r.dataset.id))};
 $("#seg").onclick=e=>{const b=e.target.closest("button");if(b&&b.dataset.t!==ty){ty=b.dataset.t;cat=C[ty][0][1];seg();chips()}};
 $("#chips").onclick=e=>{const b=e.target.closest("button");if(b){cat=b.dataset.c;chips()}};
 A.oninput=amt;
 bd.onclick=e=>{if(e.target===bd)shut()};
-rbd.onclick=e=>{if(e.target===rbd)closeReminder()};
-document.onkeydown=e=>{if(e.key==="Escape"){if(rbd.classList.contains("open"))closeReminder();else shut()}};
+document.onkeydown=e=>{if(e.key==="Escape")shut()};
 $("#prev").onclick=()=>step(-1);
 $("#next").onclick=()=>step(1);
 OK.onclick=()=>{
@@ -318,14 +322,14 @@ DEL.onclick=()=>{
   if(!armed){armed=true;DEL.textContent="Chạm lần nữa để xóa";return}
   D=D.filter(x=>x.id!==ed.id);put();shut();render();
 };
-renderReminderTimes();render();
+render();
 
 if("serviceWorker" in navigator&&/^https?:$/.test(location.protocol)){
   addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
 }
 const launch=new URLSearchParams(location.search);
-if(launch.get("add")==="1"||launch.get("reminder")==="1"){
-  if(launch.get("add")==="1")openSheet();else openReminder();
+if(launch.get("add")==="1"){
+  openSheet();
   history.replaceState(null,"",location.pathname+location.hash);
 }
 })();

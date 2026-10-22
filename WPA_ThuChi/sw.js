@@ -1,11 +1,10 @@
-const CACHE = "so-chi-tieu-v3";
+const CACHE = "so-chi-tieu-v4";
 const APP_URL = "./Chi%20ti%C3%AAu%20th%C3%A1ng.html";
 const APP_SHELL = [
   "./",
   "./index.html",
   APP_URL,
   "./manifest.webmanifest",
-  "./nhac-ghi-chi-tieu.ics",
   "./icons/icon-180.png",
   "./icons/icon-192.png",
   "./icons/icon-512.png"
