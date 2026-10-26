@@ -1,4 +1,4 @@
-const CACHE = "so-chi-tieu-v4";
+const CACHE = "so-chi-tieu-v5";
 const APP_URL = "./Chi%20ti%C3%AAu%20th%C3%A1ng.html";
 const APP_SHELL = [
   "./",

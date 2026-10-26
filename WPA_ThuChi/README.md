@@ -19,6 +19,13 @@ Sau đó mở `http://localhost:8080`.
 3. Chạm **Chia sẻ** → **Thêm vào Màn hình chính**.
 4. Mở ứng dụng từ biểu tượng vừa tạo ít nhất một lần để hoàn tất bộ nhớ đệm offline.
 
+## Lọc chi tiêu theo khoảng thời gian
+
+1. Trong tab **Chi tiêu**, chạm **Lọc khoảng thời gian**.
+2. Chọn **Từ ngày** và **Đến ngày**, rồi chạm **Xem tổng chi**.
+3. Ứng dụng hiển thị tổng tiền đã chi và các giao dịch trong khoảng đã chọn, tính cả hai ngày đầu và cuối.
+4. Mở lại bộ lọc và chạm **Bỏ lọc** để trở về chế độ xem theo tháng.
+
 ## Sao lưu và khôi phục dữ liệu
 
 Mở tab **Cài đặt** ở thanh dưới cùng:

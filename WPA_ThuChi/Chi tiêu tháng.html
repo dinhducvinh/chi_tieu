@@ -35,6 +35,27 @@ button{cursor:pointer}
 .big small{font-size:24px;font-weight:600;letter-spacing:0;margin-left:4px;color:var(--mute)}
 .sub{display:flex;justify-content:space-between;font-size:14px;color:var(--mute)}
 .sub b{font-weight:600;color:var(--in);font-variant-numeric:tabular-nums}
+.nav.range{justify-content:center}
+.nav.range button{visibility:hidden}
+.range-card{overflow:hidden;margin:20px 0 4px;border:1px solid var(--line);border-radius:16px;background:var(--sheet);box-shadow:0 6px 24px rgba(14,42,51,.04)}
+.range-card.active{border-color:color-mix(in srgb,var(--acc) 45%,var(--line))}
+.range-toggle{display:flex;align-items:center;gap:11px;width:100%;padding:12px 13px;border:0;background:none;text-align:left}
+.range-icon{display:grid;flex:none;width:36px;height:36px;place-items:center;border-radius:11px;background:var(--bg);font-size:18px}
+.range-card.active .range-icon{background:color-mix(in srgb,var(--acc) 12%,var(--bg));color:var(--acc)}
+.range-copy{flex:1;min-width:0}
+.range-copy b{display:block;font-size:14px;font-weight:600}
+.range-copy small{display:block;margin-top:2px;overflow:hidden;color:var(--mute);font-size:12px;text-overflow:ellipsis;white-space:nowrap}
+.range-chevron{flex:none;color:var(--mute);font-size:20px;transition:transform .2s}
+.range-toggle[aria-expanded="true"] .range-chevron{transform:rotate(180deg)}
+.range-panel{padding:13px;border-top:1px solid var(--line)}
+.range-fields{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.range-field{display:block;min-width:0;color:var(--mute);font-size:11px;font-weight:600}
+.range-field input{display:block;width:100%;min-width:0;height:44px;margin-top:5px;padding:0 9px;border:1px solid var(--line);border-radius:11px;background:var(--bg);font-size:14px;font-weight:500}
+.range-error{min-height:18px;margin:8px 1px;color:var(--acc);font-size:12px;line-height:1.4}
+.range-actions{display:grid;grid-template-columns:1fr auto;gap:8px}
+.range-apply,.range-clear{min-height:44px;padding:8px 14px;border-radius:11px;font-size:14px;font-weight:600}
+.range-apply{border:0;background:var(--ink);color:var(--bg)}
+.range-clear{border:1px solid var(--line);background:none;color:var(--mute)}
 .day{font-size:13px;font-weight:600;color:var(--mute);margin:30px 0 2px}
 .row{display:flex;align-items:center;gap:14px;width:100%;padding:13px 0;border:0;border-bottom:1px solid var(--line);background:none;text-align:left}
 .ico{flex:none;width:28px;text-align:center;font-size:22px}
@@ -100,19 +121,38 @@ button{cursor:pointer}
 .ok:disabled{opacity:.25}
 .del{width:100%;height:46px;margin-top:6px;border:0;background:none;color:var(--acc);font-weight:500}
 body.modal-open{overflow:hidden}
-@supports not (color:color-mix(in srgb,black,white)){.tabbar{background:var(--sheet)}.danger-card{border-color:var(--line)}}
+@media(max-width:350px){.range-fields,.range-actions{grid-template-columns:1fr}}
+@supports not (color:color-mix(in srgb,black,white)){.tabbar{background:var(--sheet)}.danger-card,.range-card.active{border-color:var(--line)}}
 </style>
 </head>
 <body>
 <main class="app" id="ledgerView">
-  <div class="nav">
+  <div class="nav" id="monthNav">
     <button id="prev" aria-label="Tháng trước">‹</button>
     <b id="mo"></b>
     <button id="next" aria-label="Tháng sau">›</button>
   </div>
-  <div class="lbl">Đã chi trong tháng</div>
+  <div class="lbl" id="summaryLabel">Đã chi trong tháng</div>
   <div class="big"><span id="out">0</span><small>đ</small></div>
-  <div class="sub"><span>Đã thu <b id="in">0đ</b></span><span><span id="cnt">0</span> giao dịch</span></div>
+  <div class="sub"><span id="monthlyIncome">Đã thu <b id="in">0đ</b></span><span id="rangeMeta" hidden></span><span><span id="cnt">0</span> giao dịch</span></div>
+  <section class="range-card" id="rangeCard" aria-labelledby="rangeTitle">
+    <button class="range-toggle" id="rangeToggle" type="button" aria-expanded="false" aria-controls="rangePanel">
+      <span class="range-icon" aria-hidden="true">▣</span>
+      <span class="range-copy"><b id="rangeTitle">Lọc khoảng thời gian</b><small id="rangeHint">Chọn ngày bắt đầu và ngày kết thúc</small></span>
+      <span class="range-chevron" aria-hidden="true">⌄</span>
+    </button>
+    <div class="range-panel" id="rangePanel" hidden>
+      <div class="range-fields">
+        <label class="range-field">Từ ngày<input id="rangeFrom" type="date" aria-label="Từ ngày"></label>
+        <label class="range-field">Đến ngày<input id="rangeTo" type="date" aria-label="Đến ngày"></label>
+      </div>
+      <p class="range-error" id="rangeError" role="alert" aria-live="polite"></p>
+      <div class="range-actions">
+        <button class="range-apply" id="applyRange" type="button">Xem tổng chi</button>
+        <button class="range-clear" id="clearRange" type="button" hidden>Bỏ lọc</button>
+      </div>
+    </div>
+  </section>
   <div id="list"></div>
 </main>
 
@@ -179,14 +219,23 @@ pad=n=>String(n).padStart(2,"0"),
 iso=d=>d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate()),
 esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])),
 now=new Date(),
-bd=$("#bd"),A=$("#a"),N=$("#n"),DT=$("#dt"),OK=$("#ok"),DEL=$("#del"),IMPORT_FILE=$("#importFile"),SETTINGS_STATUS=$("#settingsStatus"),DELETE_ALL=$("#deleteAll");
+bd=$("#bd"),A=$("#a"),N=$("#n"),DT=$("#dt"),OK=$("#ok"),DEL=$("#del"),IMPORT_FILE=$("#importFile"),SETTINGS_STATUS=$("#settingsStatus"),DELETE_ALL=$("#deleteAll"),RANGE_FROM=$("#rangeFrom"),RANGE_TO=$("#rangeTo"),RANGE_PANEL=$("#rangePanel"),RANGE_TOGGLE=$("#rangeToggle"),RANGE_ERROR=$("#rangeError"),RANGE_CLEAR=$("#clearRange");
 
 const seed=()=>[];
 
 let D;try{D=JSON.parse(localStorage.getItem(K))}catch(e){}
 if(!Array.isArray(D))D=seed();
-let cur={y:now.getFullYear(),m:now.getMonth()},ed=null,ty="out",cat="",armed=false,clearArmed=false,clearTimer;
+let cur={y:now.getFullYear(),m:now.getMonth()},range=null,ed=null,ty="out",cat="",armed=false,clearArmed=false,clearTimer;
 const persist=data=>{try{localStorage.setItem(K,JSON.stringify(data));return true}catch(e){return false}},put=()=>persist(D);
+const displayDate=value=>{const[y,m,d]=value.split("-");return d+"/"+m+"/"+y};
+function setRangePanel(open){
+  RANGE_PANEL.hidden=!open;RANGE_TOGGLE.setAttribute("aria-expanded",String(open));
+  $("#addDock").hidden=open||!$("#settingsView").hidden;
+}
+function resetRange(){
+  range=null;RANGE_FROM.value="";RANGE_TO.value="";RANGE_ERROR.textContent="";RANGE_CLEAR.hidden=true;
+  $("#rangeCard").classList.remove("active");$("#rangeHint").textContent="Chọn ngày bắt đầu và ngày kết thúc";setRangePanel(false);
+}
 const setStatus=(text,tone="")=>{SETTINGS_STATUS.textContent=text;if(tone)SETTINGS_STATUS.dataset.tone=tone;else SETTINGS_STATUS.removeAttribute("data-tone")};
 const dataSize=()=>{try{return new Blob([JSON.stringify(D)]).size}catch(e){return 0}};
 const formatSize=n=>n<1024?n+" B":(n/1024).toLocaleString("vi-VN",{maximumFractionDigits:1})+" KB";
@@ -198,7 +247,7 @@ function disarmClear(){
 }
 function showTab(name){
   const settings=name==="settings";
-  $("#ledgerView").hidden=settings;$("#settingsView").hidden=!settings;$("#addDock").hidden=settings;
+  $("#ledgerView").hidden=settings;$("#settingsView").hidden=!settings;$("#addDock").hidden=settings||!RANGE_PANEL.hidden;
   $("#tabLedger").classList.toggle("on",!settings);$("#tabSettings").classList.toggle("on",settings);
   $("#tabLedger").setAttribute("aria-selected",String(!settings));$("#tabSettings").setAttribute("aria-selected",String(settings));
   disarmClear();if(settings)updateDataStats();scrollTo(0,0);
@@ -256,23 +305,29 @@ async function importData(file){
     if(!persist(imported))throw new Error("Không thể lưu dữ liệu trên thiết bị.");
     D=imported;const latest=D.reduce((value,x)=>x.d>value?x.d:value,"");
     if(latest){const p=latest.split("-");cur={y:+p[0],m:+p[1]-1}}else{const d=new Date();cur={y:d.getFullYear(),m:d.getMonth()}}
-    render();setStatus("Đã nhập thành công "+D.length+" giao dịch.");
+    resetRange();render();setStatus("Đã nhập thành công "+D.length+" giao dịch.");
   }catch(e){setStatus("Không thể nhập: "+(e&&e.message?e.message:"tệp không hợp lệ"),"error")}
   finally{IMPORT_FILE.value=""}
 }
 
-const lab=s=>{const[y,m,d]=s.split("-").map(Number),t=new Date(y,m-1,d),k=Math.round((new Date(now.getFullYear(),now.getMonth(),now.getDate())-t)/864e5);return k===0?"Hôm nay":k===1?"Hôm qua":W[t.getDay()]+", "+pad(d)+"/"+pad(m)};
+const lab=(s,full=false)=>{const[y,m,d]=s.split("-").map(Number),t=new Date(y,m-1,d),k=Math.round((new Date(now.getFullYear(),now.getMonth(),now.getDate())-t)/864e5);if(full)return W[t.getDay()]+", "+pad(d)+"/"+pad(m)+"/"+y;return k===0?"Hôm nay":k===1?"Hôm qua":W[t.getDay()]+", "+pad(d)+"/"+pad(m)};
 const row=x=>`<button class="row" data-id="${x.id}"><span class="ico">${(C[x.t].find(c=>c[1]===x.c)||["📦"])[0]}</span><span class="mid"><b>${esc(x.n||x.c)}</b>${x.n?`<small>${esc(x.c)}</small>`:""}</span><span class="amt ${x.t}">${x.t==="in"?"+":"−"}${vnd(x.a)}</span></button>`;
 
 function render(){
-  const mk=cur.y+"-"+pad(cur.m+1),L=D.filter(x=>x.d.startsWith(mk)).sort((a,b)=>b.d.localeCompare(a.d)||b.id-a.id),
+  const active=!!range,mk=cur.y+"-"+pad(cur.m+1),L=D.filter(x=>active?x.d>=range.from&&x.d<=range.to:x.d.startsWith(mk)).sort((a,b)=>b.d.localeCompare(a.d)||b.id-a.id),
   sum=t=>L.reduce((s,x)=>s+(x.t===t?x.a:0),0);
-  $("#mo").textContent="Tháng "+(cur.m+1)+", "+cur.y;
-  $("#out").innerHTML=num(sum("out")).replace(/\./g,"<i>.</i>");
+  const spent=sum("out"),expenseCount=L.filter(x=>x.t==="out").length;
+  $("#monthNav").classList.toggle("range",active);$("#prev").disabled=active;$("#next").disabled=active;
+  $("#mo").textContent=active?displayDate(range.from)+" – "+displayDate(range.to):"Tháng "+(cur.m+1)+", "+cur.y;
+  $("#summaryLabel").textContent=active?"Đã chi trong khoảng":"Đã chi trong tháng";
+  $("#monthlyIncome").hidden=active;$("#rangeMeta").hidden=!active;
+  $("#rangeMeta").textContent=expenseCount+" khoản chi";
+  if(active){$("#rangeCard").classList.add("active");RANGE_CLEAR.hidden=false;$("#rangeHint").textContent=displayDate(range.from)+" – "+displayDate(range.to)+" · "+vnd(spent)}
+  $("#out").innerHTML=num(spent).replace(/\./g,"<i>.</i>");
   $("#in").textContent=vnd(sum("in"));$("#cnt").textContent=L.length;
   let h="",last="";
-  for(const x of L){if(x.d!==last){h+=(last?"</div>":"")+`<div class="day">${lab(x.d)}</div><div>`;last=x.d}h+=row(x)}
-  $("#list").innerHTML=last?h+"</div>":`<div class="empty">Tháng này chưa có giao dịch nào.<br>Bấm “Thêm giao dịch” để ghi khoản đầu tiên.</div>`;
+  for(const x of L){if(x.d!==last){h+=(last?"</div>":"")+`<div class="day">${lab(x.d,active)}</div><div>`;last=x.d}h+=row(x)}
+  $("#list").innerHTML=last?h+"</div>":active?`<div class="empty">Không có giao dịch nào trong khoảng đã chọn.</div>`:`<div class="empty">Tháng này chưa có giao dịch nào.<br>Bấm “Thêm giao dịch” để ghi khoản đầu tiên.</div>`;
   updateDataStats();
 }
 const seg=()=>{document.querySelectorAll("#seg button").forEach(b=>b.classList.toggle("on",b.dataset.t===ty));$(".amtbox").classList.toggle("in",ty==="in")};
@@ -289,6 +344,16 @@ const shut=()=>{bd.classList.remove("open");A.blur();N.blur();modalState()};
 const step=k=>{const d=new Date(cur.y,cur.m+k,1);cur={y:d.getFullYear(),m:d.getMonth()};render()};
 
 $("#add").onclick=()=>openSheet();
+RANGE_TOGGLE.onclick=()=>setRangePanel(RANGE_PANEL.hidden);
+$("#applyRange").onclick=()=>{
+  const from=RANGE_FROM.value,to=RANGE_TO.value;
+  if(!from||!to){RANGE_ERROR.textContent="Hãy chọn đủ ngày bắt đầu và ngày kết thúc.";return}
+  if(!validDate(from)||!validDate(to)){RANGE_ERROR.textContent="Ngày đã chọn không hợp lệ.";return}
+  if(from>to){RANGE_ERROR.textContent="Ngày bắt đầu phải trước hoặc bằng ngày kết thúc.";return}
+  RANGE_ERROR.textContent="";range={from,to};render();setRangePanel(false);
+};
+RANGE_CLEAR.onclick=()=>{resetRange();render()};
+RANGE_FROM.oninput=RANGE_TO.oninput=()=>{RANGE_ERROR.textContent=""};
 $("#tabLedger").onclick=()=>showTab("ledger");
 $("#tabSettings").onclick=()=>showTab("settings");
 $("#exportData").onclick=exportData;
@@ -302,7 +367,7 @@ DELETE_ALL.onclick=()=>{
   }
   try{localStorage.removeItem(K)}catch(e){disarmClear();setStatus("Không thể xóa dữ liệu trên thiết bị.","error");return}
   LEGACY_KEYS.forEach(key=>{try{localStorage.removeItem(key)}catch(e){}});
-  D=[];const d=new Date();cur={y:d.getFullYear(),m:d.getMonth()};disarmClear();render();setStatus("Đã xóa toàn bộ dữ liệu thu chi.");
+  D=[];const d=new Date();cur={y:d.getFullYear(),m:d.getMonth()};resetRange();disarmClear();render();setStatus("Đã xóa toàn bộ dữ liệu thu chi.");
 };
 $("#list").onclick=e=>{const r=e.target.closest(".row");if(r)openSheet(D.find(x=>x.id==r.dataset.id))};
 $("#seg").onclick=e=>{const b=e.target.closest("button");if(b&&b.dataset.t!==ty){ty=b.dataset.t;cat=C[ty][0][1];seg();chips()}};
@@ -316,7 +381,7 @@ OK.onclick=()=>{
   const a=+A.value.replace(/\D/g,"");if(!a)return;
   const o={id:ed?ed.id:Date.now(),t:ty,a,c:cat,n:N.value.trim(),d:DT.value||iso(now)};
   D=ed?D.map(x=>x.id===ed.id?o:x):[...D,o];put();
-  const p=o.d.split("-");cur={y:+p[0],m:p[1]-1};shut();render();
+  const p=o.d.split("-");cur={y:+p[0],m:p[1]-1};resetRange();shut();render();
 };
 DEL.onclick=()=>{
   if(!armed){armed=true;DEL.textContent="Chạm lần nữa để xóa";return}
